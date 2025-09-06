@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Better-auth generated tables
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  name          String?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  sessions      Session[]
+  accounts      Account[]
+  purchases     Purchase[]
+  activities    UserActivity[]
+  betaTester    BetaTester?
+  emailSignup   EmailSignup?
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  provider          String
+  providerAccountId String
+  type              String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("account")
+}
+
+// Custom business tables
+enum ProductType {
+  FULL_ACCESS
+  INDIVIDUAL_STACK
+}
+
+enum PurchaseStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model Purchase {
+  id              String         @id @default(cuid())
+  userId          String
+  productType     ProductType
+  productId       String?        // for individual stack purchases
+  amount          Decimal        @db.Decimal(10, 2)
+  currency        String         @default("USD")
+  paymentProvider String         // 'polar', 'stripe', etc.
+  paymentId       String         // external payment reference
+  status          PurchaseStatus @default(PENDING)
+  purchasedAt     DateTime       @default(now())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("purchases")
+}
+
+enum ActivityAction {
+  VIEW_STACK
+  COPY_PROMPT
+  DOWNLOAD_FILE
+  SEARCH
+}
+
+model UserActivity {
+  id        String         @id @default(cuid())
+  userId    String?        // nullable for anonymous users
+  sessionId String?        // for anonymous tracking
+  action    ActivityAction
+  stackId   String?        // stack identifier from config files
+  agentId   String?        // agent identifier
+  platform  String?        // 'cursor', 'claude_projects', 'claude_code'
+  metadata  Json?          // additional context
+  createdAt DateTime       @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("user_activity")
+}
+
+model BetaTester {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  inviteCode         String   @unique
+  accessExpiresAt    DateTime
+  feedbackSubmitted  Boolean  @default(false)
+  convertedToPaid    Boolean  @default(false)
+  createdAt          DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("beta_testers")
+}
+
+model EmailSignup {
+  id                     String   @id @default(cuid())
+  email                  String   @unique
+  source                 String   // 'landing_page', 'beta_signup', 'waitlist'
+  metadata               Json?    // utm params, referrer, etc.
+  subscribedToNewsletter Boolean  @default(true)
+  createdAt              DateTime @default(now())
+
+  user User? @relation(fields: [email], references: [email])
+
+  @@map("email_signups")
+}
