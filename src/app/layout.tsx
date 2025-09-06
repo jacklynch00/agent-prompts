@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { QueryProvider } from '@/lib/query-client';
 import { Navbar } from '@/components/layout/navbar';
+import { Footer } from '@/components/layout/footer';
 import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 
@@ -43,6 +44,7 @@ export default function RootLayout({
 					<QueryProvider>
 						<Navbar />
 						{children}
+						<Footer />
 					</QueryProvider>
 				</ThemeProvider>
 			</body>

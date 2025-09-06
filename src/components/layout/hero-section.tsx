@@ -8,8 +8,8 @@ import Image from 'next/image';
 
 export function HeroSection() {
 	return (
-		<section className='relative overflow-hidden bg-background pt-12'>
-			<div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32'>
+		<section className='relative overflow-hidden bg-background pt-24'>
+			<div className='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:pt-32 sm:pb-16'>
 				<div className='flex flex-col md:flex-row gap-12 lg:gap-16 items-center justify-between'>
 					<div className='text-center sm:text-left space-y-2 max-w-xl md:max-w-[420px]'>
 						<div>
@@ -46,7 +46,7 @@ export function HeroSection() {
 						</div>
 					</div>
 
-					<div className='w-[420px] aspect-square bg-muted rounded-2xl border-2 border-dashed border-border flex items-center justify-center'>
+					<div className='w-[300px] sm:w-[420px] aspect-square bg-muted rounded-2xl border-2 border-dashed border-border flex items-center justify-center'>
 						<Image src='/hero-image.svg' alt='Hero Image' width={420} height={420} />
 					</div>
 				</div>
