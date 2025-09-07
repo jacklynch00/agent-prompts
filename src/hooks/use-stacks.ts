@@ -80,20 +80,53 @@ export function useStack(id: string, options?: { userId?: string; sessionId?: st
 }
 
 // Get popular stacks
-export function usePopularStacks(limit?: number) {
-  return useStacks({ popular: true, limit })
+export function usePopularStacks(limit = 10) {
+  return useQuery({
+    queryKey: ['stacks', { popular: true, limit }],
+    queryFn: async (): Promise<Stack[]> => {
+      const response = await fetch(`/api/stacks?popular=true&limit=${limit}`)
+      const result = await response.json()
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to fetch popular stacks')
+      }
+      
+      return result.data
+    },
+  })
 }
 
-// Get recent stacks
-export function useRecentStacks(limit?: number) {
-  return useStacks({ recent: true, limit })
+// Get recent stacks  
+export function useRecentStacks(limit = 5) {
+  return useQuery({
+    queryKey: ['stacks', { recent: true, limit }],
+    queryFn: async (): Promise<Stack[]> => {
+      const response = await fetch(`/api/stacks?recent=true&limit=${limit}`)
+      const result = await response.json()
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to fetch recent stacks')
+      }
+      
+      return result.data
+    },
+  })
 }
 
 // Search stacks
 export function useSearchStacks(query: string) {
-  return useStacks({ 
-    search: query
-  }, {
+  return useQuery({
+    queryKey: ['stacks', { search: query }],
+    queryFn: async (): Promise<Stack[]> => {
+      const response = await fetch(`/api/stacks?search=${encodeURIComponent(query)}`)
+      const result = await response.json()
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to fetch stacks')
+      }
+      
+      return result.data
+    },
     enabled: !!query && query.length > 2 // Only search if query is longer than 2 characters
   })
 }

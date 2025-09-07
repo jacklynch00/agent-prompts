@@ -1,81 +1,70 @@
-import { PolarApi, Configuration } from '@polar-sh/sdk'
+import { Polar } from '@polar-sh/sdk'
 
 // Initialize Polar SDK
-export const polar = new PolarApi(
-  new Configuration({
-    accessToken: process.env.POLAR_ACCESS_TOKEN!,
-    basePath: process.env.POLAR_BASE_URL || 'https://api.polar.sh'
-  })
-)
+export const api = new Polar({
+  accessToken: process.env.POLAR_ACCESS_TOKEN!,
+  server: process.env.NODE_ENV === 'production' ? 'production' : 'sandbox'
+})
 
 export interface CheckoutSessionOptions {
   productId: string
   customerEmail?: string
   successUrl: string
+  embedOrigin?: string
   metadata?: Record<string, string>
 }
 
 export async function createCheckoutSession(options: CheckoutSessionOptions) {
   try {
-    const response = await polar.checkoutsCreate({
-      checkoutCreate: {
-        product_id: options.productId,
-        customer_email: options.customerEmail,
-        success_url: options.successUrl,
-        metadata: options.metadata
-      }
-    })
+    // Clean metadata - remove empty strings
+    const cleanMetadata: Record<string, string> = {}
+    if (options.metadata) {
+      Object.entries(options.metadata).forEach(([key, value]) => {
+        if (value && value.trim() !== '') {
+          cleanMetadata[key] = value
+        }
+      })
+    }
+
+    const checkoutData = {
+      products: [options.productId],
+      customerEmail: options.customerEmail,
+      successUrl: options.successUrl,
+      metadata: Object.keys(cleanMetadata).length > 0 ? cleanMetadata : undefined,
+      ...(options.embedOrigin && { embedOrigin: options.embedOrigin })
+    }
+
+    const response = await api.checkouts.create(checkoutData)
 
     return {
       success: true,
-      data: response.data
+      data: response
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to create checkout session:', error)
     return {
       success: false,
-      error: error.message || 'Failed to create checkout session'
+      error: (error as Error).message || 'Failed to create checkout session'
     }
   }
 }
 
 export async function getCheckoutSession(sessionId: string) {
   try {
-    const response = await polar.checkoutsGet({
+    const response = await api.checkouts.get({
       id: sessionId
     })
 
     return {
       success: true,
-      data: response.data
+      data: response
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to get checkout session:', error)
     return {
       success: false,
-      error: error.message || 'Failed to get checkout session'
+      error: (error as Error).message || 'Failed to get checkout session'
     }
   }
 }
 
-export async function verifyWebhookSignature(
-  payload: string,
-  signature: string,
-  secret: string
-): Promise<boolean> {
-  try {
-    const crypto = require('crypto')
-    const expectedSignature = crypto
-      .createHmac('sha256', secret)
-      .update(payload)
-      .digest('hex')
-    
-    return crypto.timingSafeEqual(
-      Buffer.from(signature, 'hex'),
-      Buffer.from(expectedSignature, 'hex')
-    )
-  } catch (error) {
-    console.error('Failed to verify webhook signature:', error)
-    return false
-  }
-}

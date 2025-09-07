@@ -1,70 +1,36 @@
 'use client';
 
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Loader2 } from 'lucide-react';
 import { useSession } from '@/lib/auth-client';
+import Link from 'next/link';
 
 interface PurchaseButtonProps {
-	productType?: 'full_access';
 	className?: string;
 	size?: 'sm' | 'default' | 'lg';
 	variant?: 'default' | 'outline' | 'secondary';
 	children?: React.ReactNode;
 }
 
-export function PurchaseButton({ productType = 'full_access', className, size = 'default', variant = 'default', children }: PurchaseButtonProps) {
-	const [loading, setLoading] = useState(false);
+export function PurchaseButton({ className, size = 'default', variant = 'default', children }: PurchaseButtonProps) {
 	const { data: session } = useSession();
 
-	const handlePurchase = async () => {
-		if (loading) return;
+	// If user is logged in, redirect to dashboard
+	if (session?.user) {
+		return (
+			<Button asChild size={size} variant={variant} className={className}>
+				<Link href="/dashboard">
+					{children || 'Go to Dashboard'}
+				</Link>
+			</Button>
+		);
+	}
 
-		// Redirect to sign in if not authenticated
-		if (!session) {
-			window.location.href = '/auth/signin?redirect=' + encodeURIComponent(window.location.pathname);
-			return;
-		}
-
-		setLoading(true);
-
-		try {
-			const response = await fetch('/api/payments/create-checkout', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					productType,
-				}),
-			});
-
-			const result = await response.json();
-
-			if (result.success) {
-				// Redirect to Polar checkout
-				window.location.href = result.data.checkoutUrl;
-			} else {
-				console.error('Failed to create checkout:', result.error);
-				alert('Failed to start checkout process. Please try again.');
-			}
-		} catch (error) {
-			console.error('Purchase error:', error);
-			alert('Something went wrong. Please try again.');
-		} finally {
-			setLoading(false);
-		}
-	};
-
+	// If user is not logged in, redirect to signup
 	return (
-		<Button onClick={handlePurchase} disabled={loading} size={size} variant={variant} className={className}>
-			{loading && <Loader2 className='h-4 w-4 mr-2 animate-spin' />}
-			{children || (
-				<>
-					{loading && 'Processing...'}
-					{!loading && <ExternalLink className='h-4 w-4 ml-2' />}
-				</>
-			)}
+		<Button asChild size={size} variant={variant} className={className}>
+			<Link href="/auth/signup">
+				{children || 'Get Started'}
+			</Link>
 		</Button>
 	);
 }

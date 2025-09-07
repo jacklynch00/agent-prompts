@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { Agent } from '@/lib/stack-types'
+import { Agent } from '@/types/agent'
 
 interface AgentsResponse {
   success: boolean
-  data: (Agent & { stackId?: string; stackName?: string })[]
+  data: Agent[]
   count: number
 }
 
@@ -52,4 +52,14 @@ export function usePremiumAgents() {
 // Get agents by platform
 export function useAgentsByPlatform(platform: string) {
   return useAgents({ platform })
+}
+
+// Get agents by category
+export function useAgentsByCategory(category: string) {
+  return useAgents({ category })
+}
+
+// Get all agents (no filters)
+export function useAllAgents() {
+  return useAgents()
 }

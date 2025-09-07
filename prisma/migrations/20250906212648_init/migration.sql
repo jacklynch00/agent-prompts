@@ -28,6 +28,8 @@ CREATE TABLE "public"."session" (
     "token" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "ipAddress" TEXT,
+    "userAgent" TEXT,
 
     CONSTRAINT "session_pkey" PRIMARY KEY ("id")
 );
@@ -36,11 +38,18 @@ CREATE TABLE "public"."session" (
 CREATE TABLE "public"."account" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "provider" TEXT NOT NULL,
-    "providerAccountId" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
+    "provider" TEXT NOT NULL DEFAULT 'credential',
+    "providerId" TEXT NOT NULL,
+    "accountId" TEXT NOT NULL,
+    "password" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "accessToken" TEXT,
+    "refreshToken" TEXT,
+    "idToken" TEXT,
+    "accessTokenExpiresAt" TIMESTAMP(3),
+    "refreshTokenExpiresAt" TIMESTAMP(3),
+    "scope" TEXT,
 
     CONSTRAINT "account_pkey" PRIMARY KEY ("id")
 );
@@ -79,28 +88,15 @@ CREATE TABLE "public"."user_activity" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."beta_testers" (
+CREATE TABLE "public"."verification" (
     "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "inviteCode" TEXT NOT NULL,
-    "accessExpiresAt" TIMESTAMP(3) NOT NULL,
-    "feedbackSubmitted" BOOLEAN NOT NULL DEFAULT false,
-    "convertedToPaid" BOOLEAN NOT NULL DEFAULT false,
+    "identifier" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "beta_testers_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."email_signups" (
-    "id" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "source" TEXT NOT NULL,
-    "metadata" JSONB,
-    "subscribedToNewsletter" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "email_signups_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "verification_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -110,16 +106,10 @@ CREATE UNIQUE INDEX "user_email_key" ON "public"."user"("email");
 CREATE UNIQUE INDEX "session_token_key" ON "public"."session"("token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "account_provider_providerAccountId_key" ON "public"."account"("provider", "providerAccountId");
+CREATE UNIQUE INDEX "account_provider_providerId_key" ON "public"."account"("provider", "providerId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "beta_testers_userId_key" ON "public"."beta_testers"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "beta_testers_inviteCode_key" ON "public"."beta_testers"("inviteCode");
-
--- CreateIndex
-CREATE UNIQUE INDEX "email_signups_email_key" ON "public"."email_signups"("email");
+CREATE UNIQUE INDEX "purchases_paymentId_key" ON "public"."purchases"("paymentId");
 
 -- AddForeignKey
 ALTER TABLE "public"."session" ADD CONSTRAINT "session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -132,9 +122,3 @@ ALTER TABLE "public"."purchases" ADD CONSTRAINT "purchases_userId_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "public"."user_activity" ADD CONSTRAINT "user_activity_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."beta_testers" ADD CONSTRAINT "beta_testers_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."email_signups" ADD CONSTRAINT "email_signups_email_fkey" FOREIGN KEY ("email") REFERENCES "public"."user"("email") ON DELETE RESTRICT ON UPDATE CASCADE;

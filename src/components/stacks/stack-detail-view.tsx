@@ -226,7 +226,7 @@ export function StackDetailView({ stack }: StackDetailViewProps) {
             <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No agents available yet</h3>
             <p className="text-muted-foreground">
-              We're working on adding AI agents for this stack. Check back soon!
+              We&apos;re working on adding AI agents for this stack. Check back soon!
             </p>
           </div>
         )}

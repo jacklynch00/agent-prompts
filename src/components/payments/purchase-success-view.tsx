@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, Crown, ArrowRight, Home } from 'lucide-react'
+import { CheckCircle, Crown, ArrowRight, Home, UserPlus } from 'lucide-react'
 import Link from 'next/link'
+import { AccountCreationForm } from '@/components/auth/account-creation-form'
 
 interface PurchaseData {
   status: string
@@ -18,6 +19,9 @@ interface PurchaseData {
     status: string
     purchasedAt: string
   } | null
+  hasAccount: boolean
+  isLoggedIn: boolean
+  checkoutId: string
 }
 
 export function PurchaseSuccessView() {
@@ -26,6 +30,8 @@ export function PurchaseSuccessView() {
   const [purchaseData, setPurchaseData] = useState<PurchaseData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showAccountCreation, setShowAccountCreation] = useState(false)
+  const [accountCreated, setAccountCreated] = useState(false)
 
   useEffect(() => {
     const verifyPurchase = async () => {
@@ -44,7 +50,7 @@ export function PurchaseSuccessView() {
         } else {
           setError(result.error || 'Failed to verify purchase')
         }
-      } catch (err) {
+      } catch {
         setError('Failed to verify purchase')
       } finally {
         setLoading(false)
@@ -56,10 +62,10 @@ export function PurchaseSuccessView() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center pt-24">
+      <div className="min-h-screen bg-background flex items-center justify-center pt-24">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Verifying your purchase...</p>
+          <p className="text-muted-foreground">Verifying your purchase...</p>
         </div>
       </div>
     )
@@ -67,7 +73,7 @@ export function PurchaseSuccessView() {
 
   if (error || !purchaseData) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center pt-24">
+      <div className="min-h-screen bg-background flex items-center justify-center pt-24">
         <div className="max-w-md w-full px-4">
           <Card className="text-center">
             <CardContent className="pt-6">
@@ -77,7 +83,7 @@ export function PurchaseSuccessView() {
                 </div>
               </div>
               <h2 className="text-xl font-semibold mb-2">Verification Failed</h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
+              <p className="text-muted-foreground mb-4">
                 {error || 'Unable to verify your purchase. Please contact support.'}
               </p>
               <Button asChild>
@@ -93,10 +99,10 @@ export function PurchaseSuccessView() {
     )
   }
 
-  const isSuccessful = purchaseData.status === 'confirmed' && purchaseData.purchase?.status === 'COMPLETED'
+  const isSuccessful = purchaseData.status === 'succeeded'
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-24">
+    <div className="min-h-screen bg-background pt-24">
       <div className="max-w-2xl mx-auto px-4 py-12">
         <Card className="text-center">
           <CardHeader>
@@ -114,7 +120,7 @@ export function PurchaseSuccessView() {
             <CardTitle className="text-2xl font-bold mb-2">
               {isSuccessful ? 'Purchase Successful!' : 'Processing Payment...'}
             </CardTitle>
-            <div className="text-gray-600 dark:text-gray-400">
+            <div className="text-muted-foreground">
               {isSuccessful 
                 ? 'You now have premium access to all AI agents!'
                 : 'Your payment is being processed. Please wait a moment.'
@@ -124,7 +130,7 @@ export function PurchaseSuccessView() {
 
           <CardContent className="space-y-6">
             {/* Purchase details */}
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+            <div className="bg-muted rounded-lg p-4">
               <h3 className="font-semibold mb-3">Purchase Details</h3>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
@@ -157,6 +163,50 @@ export function PurchaseSuccessView() {
                 </div>
               </div>
             </div>
+
+            {/* Account Creation for Guest Checkout */}
+            {isSuccessful && !purchaseData.isLoggedIn && !purchaseData.hasAccount && !showAccountCreation && !accountCreated && (
+              <div className="text-center">
+                <h3 className="text-lg font-semibold mb-3">Create Your Account</h3>
+                <p className="text-muted-foreground mb-4">
+                  Create an account to manage your premium access and stay updated with new releases.
+                </p>
+                <Button onClick={() => setShowAccountCreation(true)} size="lg">
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Create Account
+                </Button>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Optional - you already have access to all premium content
+                </p>
+              </div>
+            )}
+
+            {/* Account Creation Form */}
+            {showAccountCreation && !accountCreated && purchaseData.customerEmail && (
+              <AccountCreationForm
+                email={purchaseData.customerEmail}
+                checkoutId={purchaseData.checkoutId}
+                onAccountCreated={() => {
+                  setAccountCreated(true)
+                  setShowAccountCreation(false)
+                }}
+              />
+            )}
+
+            {/* Sign In Prompt for Existing Users */}
+            {isSuccessful && !purchaseData.isLoggedIn && purchaseData.hasAccount && (
+              <div className="text-center">
+                <h3 className="text-lg font-semibold mb-3">Welcome Back!</h3>
+                <p className="text-muted-foreground mb-4">
+                  We found an existing account with your email. Sign in to access your premium content.
+                </p>
+                <Button asChild size="lg">
+                  <Link href={`/auth/signin?redirect=${encodeURIComponent('/stacks')}`}>
+                    Sign In to Your Account
+                  </Link>
+                </Button>
+              </div>
+            )}
 
             {/* Premium benefits */}
             {isSuccessful && (
@@ -195,12 +245,12 @@ export function PurchaseSuccessView() {
             </div>
 
             {/* Support info */}
-            <div className="text-xs text-gray-500 dark:text-gray-400 border-t pt-4">
+            <div className="text-xs text-muted-foreground border-t pt-4">
               <p>
                 Questions about your purchase? Contact us at support@getagentprompts.com
               </p>
               <p className="mt-1">
-                Checkout ID: <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded text-xs">
+                Checkout ID: <code className="bg-muted px-1 rounded text-xs">
                   {checkoutId}
                 </code>
               </p>

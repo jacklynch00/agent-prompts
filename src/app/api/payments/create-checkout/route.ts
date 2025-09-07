@@ -4,13 +4,20 @@ import { auth } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
   try {
-    // Get session from Better-auth
+    // Get session from Better-auth (required for authenticated checkout)
     const session = await auth.api.getSession({
       headers: request.headers
     })
 
+    if (!session?.user) {
+      return NextResponse.json(
+        { success: false, error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
     const body = await request.json()
-    const { productType } = body
+    const { productType, embed = false } = body
 
     // For now, we only support full access purchase
     if (productType !== 'full_access') {
@@ -31,14 +38,19 @@ export async function POST(request: NextRequest) {
     const baseUrl = request.headers.get('origin') || 'http://localhost:3000'
     const successUrl = `${baseUrl}/success?checkout_id={CHECKOUT_ID}`
 
+    // Prepare metadata for authenticated user
+    const metadata: Record<string, string> = {
+      productType: 'full_access',
+      userId: session.user.id,
+      userEmail: session.user.email || ''
+    }
+
     const result = await createCheckoutSession({
       productId,
-      customerEmail: session?.user?.email,
+      customerEmail: session.user.email, // Use authenticated user's email
       successUrl,
-      metadata: {
-        userId: session?.user?.id || '',
-        productType: 'full_access'
-      }
+      embedOrigin: embed ? baseUrl : undefined, // For embedded checkout
+      metadata
     })
 
     if (!result.success) {
@@ -51,11 +63,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        checkoutUrl: result.data.url,
-        sessionId: result.data.id
+        checkoutUrl: result.data?.url,
+        sessionId: result.data?.id
       }
     })
-  } catch (error: any) {
+  } catch (error) {
     console.error('Failed to create checkout:', error)
     return NextResponse.json(
       { success: false, error: 'Internal server error' },

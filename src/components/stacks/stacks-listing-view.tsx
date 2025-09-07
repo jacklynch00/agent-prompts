@@ -150,7 +150,7 @@ export function StacksListingView() {
               </span>
               {searchQuery && (
                 <Badge variant="outline" className="text-xs">
-                  Search: "{searchQuery}"
+                  Search: &ldquo;{searchQuery}&rdquo;
                 </Badge>
               )}
               {selectedCategory && (

@@ -7,7 +7,7 @@ import { ArrowRight, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 
 export function FeaturedStacks() {
-	const { data: stacksResponse, isLoading, error } = usePopularStacks(6);
+	const { data: stacks, isLoading, error } = usePopularStacks(6);
 
 	if (error) {
 		return (
@@ -44,10 +44,10 @@ export function FeaturedStacks() {
 				)}
 
 				{/* Stacks grid */}
-				{stacksResponse?.data && (
+				{stacks && stacks.length > 0 && (
 					<>
 						<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12'>
-							{stacksResponse.data.map((stack) => (
+							{stacks.map((stack) => (
 								<StackCard key={stack.id} stack={stack} />
 							))}
 						</div>
@@ -61,14 +61,14 @@ export function FeaturedStacks() {
 								</Link>
 							</Button>
 							<p className='mt-4 text-sm text-muted-foreground'>
-								{stacksResponse.count > 6 ? `Showing 6 of ${stacksResponse.count} available stacks` : `${stacksResponse.count} stacks available`}
+								{stacks.length > 6 ? `Showing 6 of ${stacks.length} available stacks` : `${stacks.length} stacks available`}
 							</p>
 						</div>
 					</>
 				)}
 
 				{/* Empty state */}
-				{stacksResponse?.data && stacksResponse.data.length === 0 && (
+				{stacks && stacks.length === 0 && (
 					<div className='text-center py-12'>
 						<div className='text-muted-foreground mb-4'>
 							<TrendingUp className='h-12 w-12 mx-auto' />

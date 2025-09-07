@@ -19,7 +19,7 @@ export class AnalyticsService {
     stackId?: string
     agentId?: string
     platform?: string
-    metadata?: Record<string, any>
+    metadata?: Record<string, string | number | boolean>
   }) {
     try {
       await db.userActivity.create({
