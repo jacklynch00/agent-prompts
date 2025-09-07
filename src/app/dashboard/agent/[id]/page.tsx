@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Copy, Lock, ArrowLeft, Sparkles, Code, Globe, Terminal, FileText } from 'lucide-react';
+import { Copy, Lock, ArrowLeft, Sparkles, FileText } from 'lucide-react';
 import { useUserPurchases } from '@/hooks/queries/use-user-purchases';
 import Link from 'next/link';
 import { AgentService } from '@/data/agents';
@@ -72,11 +72,11 @@ export default function AgentDetailPage() {
 	const getPlatformIcon = (platformType: string) => {
 		switch (platformType) {
 			case 'cursor':
-				return <Code className='h-4 w-4' />;
+				return <img src='/hero-logos/cursor.svg' alt='Cursor' className='h-4 w-4' />;
 			case 'claude_projects':
-				return <Globe className='h-4 w-4' />;
+				return <img src='/hero-logos/claude.svg' alt='Claude' className='h-4 w-4' />;
 			case 'claude_code':
-				return <Terminal className='h-4 w-4' />;
+				return <img src='/hero-logos/claude.svg' alt='Claude' className='h-4 w-4' />;
 			case 'generic':
 				return <FileText className='h-4 w-4' />;
 			default:
@@ -228,8 +228,8 @@ export default function AgentDetailPage() {
 												)}
 
 												<div className='relative'>
-													<pre className='bg-muted p-4 rounded-lg text-sm overflow-x-auto max-h-96 overflow-y-auto'>
-														<code>{platform.content}</code>
+													<pre className='bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4 rounded-lg text-sm overflow-x-auto max-h-96 overflow-y-auto'>
+														<code className='text-slate-800 dark:text-slate-200'>{platform.content}</code>
 													</pre>
 												</div>
 
