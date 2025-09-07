@@ -11,6 +11,7 @@ import { Copy, Lock, ArrowLeft, Sparkles, FileText } from 'lucide-react';
 import { useUserPurchases } from '@/hooks/queries/use-user-purchases';
 import Link from 'next/link';
 import { AgentService } from '@/data/agents';
+import Image from 'next/image';
 
 const FREE_AGENT_IDS = ['nextjs-expert', 'better-auth-expert', 'prisma-expert'];
 
@@ -72,11 +73,11 @@ export default function AgentDetailPage() {
 	const getPlatformIcon = (platformType: string) => {
 		switch (platformType) {
 			case 'cursor':
-				return <img src='/hero-logos/cursor.svg' alt='Cursor' className='h-4 w-4' />;
+				return <Image src='/hero-logos/cursor.svg' alt='Cursor' className='h-4 w-4' />;
 			case 'claude_projects':
-				return <img src='/hero-logos/claude.svg' alt='Claude' className='h-4 w-4' />;
+				return <Image src='/hero-logos/claude.svg' alt='Claude' className='h-4 w-4' />;
 			case 'claude_code':
-				return <img src='/hero-logos/claude.svg' alt='Claude' className='h-4 w-4' />;
+				return <Image src='/hero-logos/claude.svg' alt='Claude' className='h-4 w-4' />;
 			case 'generic':
 				return <FileText className='h-4 w-4' />;
 			default:

@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Copy, ArrowLeft, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { AgentService } from '@/data/agents';
+import Image from 'next/image';
 
 const FREE_AGENT_IDS = ['nextjs-expert', 'better-auth-expert', 'prisma-expert'];
 
@@ -66,11 +67,11 @@ export default function ExampleAgentPage() {
 	const getPlatformIcon = (platformType: string) => {
 		switch (platformType) {
 			case 'cursor':
-				return <img src='/hero-logos/cursor.svg' alt='Cursor' className='h-4 w-4' />;
+				return <Image src='/hero-logos/cursor.svg' alt='Cursor' className='h-4 w-4' />;
 			case 'claude_projects':
-				return <img src='/hero-logos/claude.svg' alt='Claude' className='h-4 w-4' />;
+				return <Image src='/hero-logos/claude.svg' alt='Claude' className='h-4 w-4' />;
 			case 'claude_code':
-				return <img src='/hero-logos/claude.svg' alt='Claude' className='h-4 w-4' />;
+				return <Image src='/hero-logos/claude.svg' alt='Claude' className='h-4 w-4' />;
 			case 'generic':
 				return <FileText className='h-4 w-4' />;
 			default:
@@ -173,9 +174,7 @@ export default function ExampleAgentPage() {
 					<Card>
 						<CardHeader>
 							<CardTitle>Platform Configurations</CardTitle>
-							<CardDescription>
-								This is a free example. Sign up for full access to all our premium agents and features.
-							</CardDescription>
+							<CardDescription>This is a free example. Sign up for full access to all our premium agents and features.</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<Tabs defaultValue={agent.platforms[0]?.type} className='w-full'>
