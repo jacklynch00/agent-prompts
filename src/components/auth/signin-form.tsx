@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Bot, Github, Loader2, AlertCircle } from 'lucide-react';
 import { signIn } from '@/lib/auth-client';
+import Image from 'next/image';
 
 export function SignInForm() {
 	const [email, setEmail] = useState('');
@@ -43,21 +44,25 @@ export function SignInForm() {
 		}
 	};
 
+	const handleGoogleSignIn = async () => {
+		if (loading) return;
+		setLoading(true);
+		setError(null);
+		await signIn.social({
+			provider: 'google',
+			callbackURL: '/dashboard',
+		});
+	};
+
 	const handleGithubSignIn = async () => {
 		if (loading) return;
 
 		setLoading(true);
 		setError(null);
-
-		try {
-			await signIn.social({
-				provider: 'github',
-				callbackURL: '/dashboard',
-			});
-		} catch (err: unknown) {
-			setError(err instanceof Error ? err.message : 'Failed to sign in with GitHub');
-			setLoading(false);
-		}
+		await signIn.social({
+			provider: 'github',
+			callbackURL: '/dashboard',
+		});
 	};
 
 	return (
@@ -105,6 +110,12 @@ export function SignInForm() {
 						<span className='bg-background px-2 text-sm text-muted-foreground'>or</span>
 					</div>
 				</div>
+
+				{/* Google Sign In */}
+				<Button variant='outline' onClick={handleGoogleSignIn} disabled={loading} className='w-full'>
+					<Image src='/hero-logos/google.png' alt='Google' className='h-4 w-4 mr-2' width={16} height={16} />
+					Continue with Google
+				</Button>
 
 				{/* GitHub Sign In */}
 				<Button variant='outline' onClick={handleGithubSignIn} disabled={loading} className='w-full'>
