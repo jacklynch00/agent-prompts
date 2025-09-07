@@ -5,7 +5,7 @@ export const drizzleExpertAgent: Agent = {
 	name: 'Drizzle ORM Expert',
 	description: 'Drizzle ORM specialist for type-safe schema design, queries, migrations, and database operations',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'database',
 	tags: ['orm', 'database', 'typescript', 'type-safe', 'migrations', 'postgresql', 'mysql', 'sqlite'],
 	relatedAgents: ['postgresql-expert', 'mysql-expert', 'typescript-expert'],

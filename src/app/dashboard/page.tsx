@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useSession } from '@/lib/auth-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Crown, Zap } from 'lucide-react';
@@ -11,12 +10,10 @@ import { useUserPurchases } from '@/hooks/queries/use-user-purchases';
 import { useCreateCheckout } from '@/hooks/mutations/use-create-checkout';
 import { useQueryClient } from '@tanstack/react-query';
 import { AgentsDataTable } from '@/components/dashboard/agents-data-table';
-import Link from 'next/link';
 
-const FREE_AGENT_IDS = ['nextjs-expert', 'typescript-expert', 'frontend-file-structure-expert']; // First 3 agents are free
+const FREE_AGENT_IDS = ['nextjs-expert', 'better-auth-expert', 'prisma-expert']; // 3 public agents
 
 export default function Dashboard() {
-	const { data: session, isPending } = useSession();
 	const queryClient = useQueryClient();
 
 	// Use custom hooks
@@ -62,7 +59,7 @@ export default function Dashboard() {
 		}
 	};
 
-	if (isPending || purchasesLoading || agentsLoading) {
+	if (purchasesLoading || agentsLoading) {
 		return (
 			<div className='min-h-screen bg-background flex items-center justify-center pt-24'>
 				<div className='animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600'></div>
@@ -72,22 +69,6 @@ export default function Dashboard() {
 
 	// Filter agents into free and premium for upgrade banner
 	const premiumAgents = agents.filter((agent) => !FREE_AGENT_IDS.includes(agent.id)) || [];
-
-	if (!session?.user) {
-		return (
-			<div className='min-h-screen bg-background flex items-center justify-center pt-24'>
-				<Card className='max-w-md w-full mx-4'>
-					<CardContent className='pt-6 text-center'>
-						<h2 className='text-xl font-semibold mb-4'>Please Sign In</h2>
-						<p className='text-muted-foreground mb-4'>You need to be signed in to access your dashboard.</p>
-						<Button asChild>
-							<Link href='/auth/signin'>Sign In</Link>
-						</Button>
-					</CardContent>
-				</Card>
-			</div>
-		);
-	}
 
 	return (
 		<div className='min-h-screen bg-background pt-24'>

@@ -30,7 +30,7 @@ interface AgentsDataTableProps {
 	categories: string[];
 }
 
-const FREE_AGENT_IDS = ['nextjs-expert', 'typescript-expert', 'frontend-file-structure-expert'];
+const FREE_AGENT_IDS = ['nextjs-expert', 'better-auth-expert', 'prisma-expert'];
 
 export function AgentsDataTable({ data, categories }: AgentsDataTableProps) {
 	const router = useRouter();

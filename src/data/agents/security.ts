@@ -5,7 +5,7 @@ export const securityBestPracticesExpertAgent: Agent = {
 	name: 'Security Best Practices Expert',
 	description: 'Security specialist for web application security, authentication, data protection, and secure development practices',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'architecture',
 	tags: ['security', 'authentication', 'data-protection', 'web-security', 'privacy'],
 	relatedAgents: ['authentication-expert', 'database-expert'],

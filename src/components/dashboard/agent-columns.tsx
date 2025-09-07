@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import type { Agent } from "@/types/agent"
 
-const FREE_AGENT_IDS = ['nextjs-expert', 'typescript-expert', 'frontend-file-structure-expert']
+const FREE_AGENT_IDS = ['nextjs-expert', 'better-auth-expert', 'prisma-expert']
 
 export function getAgentColumns(hasFullAccess: boolean): ColumnDef<Agent>[] {
   return [

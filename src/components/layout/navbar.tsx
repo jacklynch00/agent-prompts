@@ -86,8 +86,11 @@ export function Navbar() {
 								</DropdownMenu>
 							</div>
 						) : (
-							/* Get Started button for guests */
-							<div className='flex items-center gap-4'>
+							/* Sign in and Get Started buttons for guests */
+							<div className='flex items-center gap-3'>
+								<Button variant='outline' size='sm' asChild>
+									<Link href='/auth/signin'>Sign In</Link>
+								</Button>
 								<PurchaseButton size='sm' className='rounded-md'>
 									Get Started
 								</PurchaseButton>

@@ -5,7 +5,7 @@ export const clerkExpertAgent: Agent = {
 	name: 'Clerk Expert',
 	description: 'Clerk authentication service specialist for integration, user management, and authentication flows',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'authentication',
 	tags: ['authentication', 'clerk', 'user-management', 'auth-flows', 'integration'],
 	relatedAgents: ['nextjs-expert', 'react-expert', 'typescript-expert'],

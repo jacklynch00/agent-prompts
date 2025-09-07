@@ -5,7 +5,7 @@ export const typescriptExpertAgent: Agent = {
 	name: 'TypeScript Expert',
 	description: 'TypeScript specialist for type definitions, advanced types, configuration, and type safety patterns',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'development',
 	tags: ['typescript', 'types', 'configuration', 'type-safety', 'generics'],
 	relatedAgents: ['javascript-expert', 'node-expert'],

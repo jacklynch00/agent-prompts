@@ -5,7 +5,7 @@ export const viteExpertAgent: Agent = {
 	name: 'Vite Expert',
 	description: 'Vite build tool specialist for configuration, plugins, optimization, and development workflow',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'development',
 	tags: ['build-tool', 'bundler', 'dev-server', 'hmr', 'plugins', 'optimization'],
 	relatedAgents: ['typescript-expert', 'react-expert', 'vue-expert'],

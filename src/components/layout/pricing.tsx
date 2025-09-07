@@ -15,7 +15,7 @@ export function PricingSection() {
 		priceSuffix: '/one time',
 		features: [
 			['20+ Tech Stacks', 'All Agent Prompts', 'Lifetime Access'],
-			['Copy-Paste Ready', 'Regular Updates'],
+			['Copy-Paste Ready', 'Regular Updates to agents', 'Access to all new agents'],
 		],
 		buttonText: 'Get Full Stack Agents',
 	};

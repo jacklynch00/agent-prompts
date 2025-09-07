@@ -5,7 +5,7 @@ export const laravelExpertAgent: Agent = {
 	name: 'Laravel Expert',
 	description: 'Laravel framework specialist for Eloquent, routing, middleware, and Laravel-specific patterns',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'development',
 	tags: ['php', 'framework', 'mvc', 'eloquent', 'artisan', 'blade'],
 	relatedAgents: ['php-expert', 'mysql-expert', 'api-expert'],

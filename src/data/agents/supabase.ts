@@ -5,7 +5,7 @@ export const supabaseExpertAgent: Agent = {
 	name: 'Supabase Expert',
 	description: 'Supabase specialist for database operations, authentication, storage, and real-time features',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'database',
 	tags: ['supabase', 'postgresql', 'auth', 'storage', 'real-time', 'rpc'],
 	relatedAgents: ['postgresql-expert', 'typescript-expert'],

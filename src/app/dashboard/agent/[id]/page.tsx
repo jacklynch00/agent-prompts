@@ -12,7 +12,7 @@ import { useUserPurchases } from '@/hooks/queries/use-user-purchases';
 import Link from 'next/link';
 import { AgentService } from '@/data/agents';
 
-const FREE_AGENT_IDS = ['nextjs-expert', 'typescript-expert', 'frontend-file-structure-expert'];
+const FREE_AGENT_IDS = ['nextjs-expert', 'better-auth-expert', 'prisma-expert'];
 
 export default function AgentDetailPage() {
 	const params = useParams();
@@ -48,13 +48,13 @@ export default function AgentDetailPage() {
 		);
 	}
 
-	if (!session?.user) {
+	if (!session?.user && !isFree) {
 		return (
 			<div className='min-h-screen bg-background flex items-center justify-center pt-24'>
 				<Card className='max-w-md w-full mx-4'>
 					<CardContent className='pt-6 text-center'>
 						<h2 className='text-xl font-semibold mb-4'>Authentication Required</h2>
-						<p className='text-muted-foreground mb-4'>Please sign in to view agent details.</p>
+						<p className='text-muted-foreground mb-4'>Please sign in to view this premium agent.</p>
 						<Button asChild>
 							<Link href='/auth/signin'>Sign In</Link>
 						</Button>

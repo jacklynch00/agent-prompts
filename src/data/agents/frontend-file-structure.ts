@@ -5,7 +5,7 @@ export const frontendFileStructureExpertAgent: Agent = {
 	name: 'Frontend File Structure Expert',
 	description: 'Frontend file organization specialist for component architecture, asset management, and scalable project structure',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'architecture',
 	tags: ['file-structure', 'organization', 'components', 'assets', 'scalability'],
 	relatedAgents: ['typescript-expert', 'testing-expert'],

@@ -5,7 +5,7 @@ export const betterAuthExpertAgent: Agent = {
 	name: 'Better-Auth Expert',
 	description: 'Better-Auth specialist for authentication configuration, session management, and auth patterns',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'authentication',
 	tags: ['authentication', 'better-auth', 'session-management', 'auth-flows', 'plugins'],
 	relatedAgents: ['typescript-expert', 'database-expert'],

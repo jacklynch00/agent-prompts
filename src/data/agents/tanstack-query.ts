@@ -5,7 +5,7 @@ export const tanstackQueryExpertAgent: Agent = {
 	name: 'TanStack Query Expert',
 	description: 'TanStack Query specialist for server state management, caching, and data fetching patterns',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'development',
 	tags: ['react', 'data-fetching', 'caching', 'server-state', 'mutations'],
 	relatedAgents: ['react-expert', 'typescript-expert', 'api-expert'],

@@ -5,7 +5,7 @@ export const nextjsExpertAgent: Agent = {
 	name: 'Next.js 15 Expert',
 	description: 'Modern Next.js development with App Router, Server Components, and TypeScript best practices',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'development',
 	tags: ['frontend', 'react', 'typescript', 'ssr', 'framework', 'app-router'],
 	relatedAgents: ['react-expert', 'typescript-expert', 'tailwind-expert'],

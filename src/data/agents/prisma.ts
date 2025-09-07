@@ -5,7 +5,7 @@ export const prismaExpertAgent: Agent = {
 	name: 'Prisma Expert',
 	description: 'Prisma ORM specialist for schema design, queries, migrations, and database operations',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'database',
 	tags: ['orm', 'database', 'typescript', 'migrations', 'postgresql', 'mysql', 'sqlite'],
 	relatedAgents: ['postgresql-expert', 'mysql-expert', 'typescript-expert'],

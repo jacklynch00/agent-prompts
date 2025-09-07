@@ -5,7 +5,7 @@ export const mongodbExpertAgent: Agent = {
 	name: 'MongoDB Expert',
 	description: 'MongoDB specialist for document modeling, queries, aggregations, and database operations',
 	version: '1.0.0',
-	lastUpdated: '2024-01-15',
+	lastUpdated: '2025-09-05',
 	category: 'database',
 	tags: ['nosql', 'database', 'document-store', 'aggregation', 'indexing', 'mongoose'],
 	relatedAgents: ['mongoose-expert', 'node-expert', 'express-expert'],
