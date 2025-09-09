@@ -90,6 +90,15 @@ export function PricingSection() {
 						<span className='text-6xl font-semibold'>{pricingDetails.price}</span>
 						<span className='self-end text-muted-foreground'>{pricingDetails.priceSuffix}</span>
 					</div>
+					
+					{/* Beta discount badge */}
+					<div className='mt-4 mx-auto'>
+						<div className='inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-200 dark:border-green-800 rounded-full'>
+							<span className='text-sm font-semibold text-green-700 dark:text-green-300'>
+								🎉 Use code <code className='bg-green-100 dark:bg-green-900 px-2 py-1 rounded text-green-800 dark:text-green-200 font-mono'>&quot;beta&quot;</code> for FREE access!
+							</span>
+						</div>
+					</div>
 					<div className='my-6'>
 						{pricingDetails.features.map((featureGroup, idx) => (
 							<div key={idx}>

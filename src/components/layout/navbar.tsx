@@ -7,12 +7,24 @@ import { useSession } from '@/lib/auth-client';
 import { Button } from '@/components/ui/button';
 import { signOut } from '@/lib/auth-client';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useEffect, useState } from 'react';
 
 export function Navbar() {
 	const { data: session } = useSession();
+	const [isScrolled, setIsScrolled] = useState(false);
+
+	useEffect(() => {
+		const handleScroll = () => {
+			// Banner height is approximately 48px, so set threshold a bit higher
+			setIsScrolled(window.scrollY > 60);
+		};
+
+		window.addEventListener('scroll', handleScroll);
+		return () => window.removeEventListener('scroll', handleScroll);
+	}, []);
 
 	return (
-		<nav className='fixed top-4 left-4 right-4 z-50'>
+		<nav className={`fixed left-4 right-4 z-50 transition-all duration-300 ${isScrolled ? 'top-4' : 'top-16'}`}>
 			<div className='max-w-7xl mx-auto'>
 				<div className='bg-background/80 backdrop-blur-md border rounded-2xl px-6 py-3 shadow-lg'>
 					<div className='flex items-center justify-between'>
