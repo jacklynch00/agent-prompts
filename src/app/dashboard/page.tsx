@@ -71,7 +71,7 @@ export default function Dashboard() {
 	const premiumAgents = agents.filter((agent) => !FREE_AGENT_IDS.includes(agent.id)) || [];
 
 	return (
-		<div className='min-h-screen bg-background pt-24'>
+		<div className={`min-h-screen bg-background ${purchases?.hasFullAccess ? 'pt-24' : 'pt-32'}`}>
 			<div className='max-w-6xl mx-auto px-4 py-8'>
 				{/* Upgrade Prompt for Premium Access */}
 				{!purchases?.hasFullAccess && (

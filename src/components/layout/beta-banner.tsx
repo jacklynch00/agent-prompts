@@ -2,7 +2,13 @@
 
 import { Sparkles } from 'lucide-react';
 
-export function BetaBanner() {
+interface BetaBannerProps {
+	show?: boolean;
+}
+
+export function BetaBanner({ show = true }: BetaBannerProps) {
+	if (!show) return null;
+
 	return (
 		<div className='relative bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 text-white'>
 			<div className='max-w-7xl mx-auto px-4 py-2'>
