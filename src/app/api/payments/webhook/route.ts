@@ -5,16 +5,30 @@ import { NextRequest } from 'next/server';
 // Add error handling wrapper
 export async function POST(request: Request) {
 	try {
+		// Log headers for debugging
+		const headers = Object.fromEntries(request.headers.entries());
 		console.log('Webhook endpoint hit:', {
 			url: request.url,
 			method: request.method,
 			hasSecret: !!process.env.POLAR_WEBHOOK_SECRET,
 			secretLength: process.env.POLAR_WEBHOOK_SECRET?.length || 0,
+			polarSignature: headers['polar-signature'] || 'missing',
+			contentType: headers['content-type'],
 		});
 
-		return await webhookHandler(request as NextRequest);
+		const result = await webhookHandler(request as NextRequest);
+		
+		console.log('Webhook handler result:', {
+			status: result.status,
+			statusText: result.statusText,
+		});
+		
+		return result;
 	} catch (error) {
-		console.error('Webhook error:', error);
+		console.error('Webhook error details:', {
+			error: error instanceof Error ? error.message : String(error),
+			stack: error instanceof Error ? error.stack : undefined,
+		});
 		return new Response('Webhook error', { status: 500 });
 	}
 }
