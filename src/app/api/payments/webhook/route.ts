@@ -12,6 +12,7 @@ export async function POST(request: Request) {
 			method: request.method,
 			hasSecret: !!process.env.POLAR_WEBHOOK_SECRET,
 			secretLength: process.env.POLAR_WEBHOOK_SECRET?.length || 0,
+			allHeaders: headers, // Log ALL headers to see what's actually sent
 			polarSignature: headers['polar-signature'] || 'missing',
 			contentType: headers['content-type'],
 		});
